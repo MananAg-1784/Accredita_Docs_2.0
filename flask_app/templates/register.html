@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="/static?file_name=logo_orange.png" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/signin.css')}}">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/logo.png')}}">
+  </head>
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  display: none;
+  margin-right: 12px;
+}
+
+.alert{
+  display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+  </style>
+  <body>
+    <!-- Sign Up Section -->
+    <div class="signin-container">
+
+      <!-- Card on the left -->
+      <div class="form-card">
+        <a href="/" class="back-icon flex row" style="align-items: center;margin-bottom: 10px !important;"> 
+          <div class="flex" style="align-items: center;">
+            <img src="/static?file_name=arrow_head-rotated90.png" alt="" style="
+                height: 12px;
+                position: relative;
+                top: -0.5px;
+                padding-right: 5px;
+            ">
+          </div>
+          <div style="
+              color: black;
+              font-size: 16px;
+          ">Back</div>
+        </a>
+        
+        <form class="signin-form" action="/register" method="post">
+          <h2>Sign Up</h2>
+          <h5>Set up your new account using your email</h5>
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="" id="flash_messages">
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{category}}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+          {% endwith %}
+          <label for="">First Name</label>
+          <input type="text" id="first_name" name="first_name" placeholder="Enter first name" required />
+          <label for="">Last Name</label>
+          <input type="text" id="last_name" name="last_name" placeholder="Enter last name" required />
+          <label for="">Email</label>
+          <input type="text" id="email" name="email" placeholder="Enter Email" required />
+          <label for="">Password</label>
+          <input
+            type="password"
+            id="pwd"
+            name="password"
+            placeholder="Enter Password"
+            style = "margin-bottom: 30px !important; "
+            pattern="(?=.*\d)[A-Za-z\d]{8,}" 
+               title="Minimum Length : 8, Must contain only letters and digits with atleast one digit"
+            required
+          />
+          <button type="submit" class="signin-btn">Sign Up</button>
+
+        </form>
+        <p class="login-link" style="color: #757575;">
+            Already have an account? <a href="/login" style="color:#007aff;">Sign In</a>
+          </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block body %} 
+<link rel="stylesheet" href="{{url_for('static', filename='css/search.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/multi-select.css')}}">
+
+<section class="flex row">
+    <div class="flex column gap-10" id="search_options">
+        <div class="flex column gap-10" style="padding-bottom: 150px !important; height:max-content;">
+            <div class="flex column">
+                <div style="font-size: 20px; font-weight: 600;">Search for Files</div>
+                <div>
+                    <em>Select and categories files.</em>
+                </div>
+            </div>
+            <div class="flex column gap-5">
+                <label for="select_accredition">Accredition</label>
+                <select name="select_accredition" id="select_accredition" onchange="add_acc_data(this.value)">
+                    <option value="-1" disabled selected>Select Accredition</option>
+                    {% for acc in accreditions %}
+                        <option value="{{acc}}">{{acc}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex column gap-5">
+                <label for="select_academic_year">Academic Year</label>
+                <div class="flex column">
+                    <div class="flex row gap-5" style="width: 80%">
+                        <select name="select_academic_year" id="select_academic_year" onchange="change_academic_year()" style="width:45%;">
+                            <option value="-1" disabled selected>Academic Year</option>
+                        </select>
+                        <select name="select_academic_month" id="select_academic_month" onchange="display_academic_year_details()" style="width:55%;">
+                            <option value="-1" disabled selected>Month</option>
+                        </select>
+                    </div>
+                    <div id="academic_year_details"></div>
+                </div>
+            </div>
+            <div class="flex column gap-10">
+                <div>Categorise files using</div>
+                <div class="flex column gap-5">
+                    <div class="flex row gap-10 align-center">
+                        <input type="radio" name="select_filter" id="checked" onchange="radio_check(1)" class="radio_category">
+                        <label for="select_category">Category</label>
+                    </div>
+                    <select name="select_category" multiple id="select_category" onchange="check_options('select_category')" >    
+                        {% for cat in category %}
+                            <option value="{{cat.category}}">{{cat.category ~ " - " ~ cat.definition}}</option>
+                        {% endfor %}
+                        <option value="all">All</option>
+                    </select>
+                </div>
+                <div class="flex column gap-5">
+                    <div class="flex row gap-10 align-center">
+                        <input type="radio" name="select_filter" onchange="radio_check(0)" class="radio_criteria">
+                        <label for="select_criteria">Criteria</label>
+                    </div>
+                    <select name="select_criteria" multiple id="select_criteria" onchange="check_options('select_criteria')">
+                        
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button onclick="search()" style="padding: 5px 20px;">Search</button>
+            </div>         
+        </div>
+    </div>
+    <div class="flex column" id="display" style="padding: 0px !important">
+        <div id="flash_messages" class="flex row gap-10 align-center"></div>
+        <div id="stream_update" class="flex row gap-10 align-center"></div>
+        <div id="search_results" class="flex column" style="margin-top: 5px !important;">
+            <em style="padding: 0 20px;">Search Results...</em>
+        </div>
+        <div id="display_options_response" class="hide">
+        </div>
+    </div>
+</section>
+<div id="overlay">
+</div>
+{% endblock %}
+{% block scripts %} 
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    var accreditions = {{accreditions| tojson}};
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+    var category = {{category| tojson}};
+    var criteria = {{criteria| tojson}};
+    const acc_start_mnth = 4;
+
+</script>
+<script src="{{url_for('static', filename='scripts/search/main.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/search/select_tags.js')}}"></script>
+{% endblock %}
+
